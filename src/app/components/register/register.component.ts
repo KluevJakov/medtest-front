@@ -2,30 +2,33 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../servises/auth.service';
 
 const API_URL: string = environment.apiUrl;
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class LoginComponent implements OnInit {
-  public formLogin = new FormGroup({
-    login: new FormControl(''),
-    password: new FormControl(''),
-  });
+export class RegisterComponent implements OnInit {
+
   public hasError?: boolean;
   public errorMsg?: string;
+
+  formRegister = new FormGroup({
+    name: new FormControl(''),
+    login: new FormControl(''),
+    password: new FormControl(''),
+    passwordAccept: new FormControl('')
+  });
 
   constructor(private http: HttpClient, 
     private router: Router,
     public fb: FormBuilder,
-    private authService: AuthService) { 
-    
-  }
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     if (this.authService.isUserLoggedIn()) {
@@ -35,18 +38,23 @@ export class LoginComponent implements OnInit {
     this.errorMsg = "";
   }
 
-  login() {
-    this.http.post<any>(API_URL + '/login', this.formLogin.value)
+  auth(): void {
+    this.register(this.formRegister)
       .subscribe(
         (result: any) => {
-          sessionStorage.setItem('user', JSON.stringify(result));
-          this.router.navigate(['/']);
+          this.router.navigate(['/login']);
+          console.log(result);
         },
         (error: HttpErrorResponse) => {
-          (document.getElementById("password") as HTMLInputElement).value = '';
           this.hasError = true;
           this.errorMsg = error.error;
+          console.log(error.error);
         }
       );
   }
+
+  register(form: FormGroup): Observable<any> {
+    return this.http.post<any>(API_URL + '/register', form.value);
+  }
+
 }

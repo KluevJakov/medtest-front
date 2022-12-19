@@ -2,33 +2,30 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../servises/auth.service';
 
 const API_URL: string = environment.apiUrl;
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class RegisterComponent implements OnInit {
-
-  public hasError?: boolean;
-  public errorMsg?: string;
-
-  formRegister = new FormGroup({
-    name: new FormControl(''),
+export class LoginComponent implements OnInit {
+  public formLogin = new FormGroup({
     login: new FormControl(''),
     password: new FormControl(''),
-    passwordAccept: new FormControl('')
   });
+  public hasError?: boolean;
+  public errorMsg?: string;
 
   constructor(private http: HttpClient, 
     private router: Router,
     public fb: FormBuilder,
-    private authService: AuthService) { }
+    private authService: AuthService) { 
+    
+  }
 
   ngOnInit(): void {
     if (this.authService.isUserLoggedIn()) {
@@ -38,23 +35,18 @@ export class RegisterComponent implements OnInit {
     this.errorMsg = "";
   }
 
-  auth(): void {
-    this.register(this.formRegister)
+  login() {
+    this.http.post<any>(API_URL + '/login', this.formLogin.value)
       .subscribe(
         (result: any) => {
-          this.router.navigate(['/login']);
-          console.log(result);
+          sessionStorage.setItem('user', JSON.stringify(result));
+          this.router.navigate(['/']);
         },
         (error: HttpErrorResponse) => {
+          (document.getElementById("password") as HTMLInputElement).value = '';
           this.hasError = true;
           this.errorMsg = error.error;
-          console.log(error.error);
         }
       );
   }
-
-  register(form: FormGroup): Observable<any> {
-    return this.http.post<any>(API_URL + '/register', form.value);
-  }
-
 }
