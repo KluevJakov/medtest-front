@@ -8,8 +8,8 @@
         <form class="d-flex flex-column" style="width: 100%;" [formGroup] = "formRegister" (ngSubmit) = "auth()" method = "POST" ngNativeValidate>
             <input class="inpt" type="text" placeholder="Имя" formControlName="name" required>
             <input class="inpt" type="text" placeholder="Логин" formControlName="login" required>
-            <input class="inpt" type="password" placeholder="Пароль" formControlName="password" required>
-            <input class="inpt" type="password" placeholder="Повторить пароль" formControlName="passwordAccept" required>
+            <input class="inpt" type="password" placeholder="Пароль" formControlName="password" minlength="8" maxlength="20" required>
+            <input class="inpt" type="password" placeholder="Повторить пароль" formControlName="passwordAccept" minlength="8" maxlength="20" required>
             <button class="inpt btn-reg-log">Зарегистрироваться</button>
             <span *ngIf="hasError" class="alert alert-warning" role="alert">{{errorMsg}}</span>
         </form>

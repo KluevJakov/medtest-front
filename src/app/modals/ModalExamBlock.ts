@@ -9,11 +9,33 @@ import { CommonModule } from '@angular/common';
 const API_URL: string = environment.apiUrl;
 
 @Component({
-	selector: 'modal-marathon-block',
+	selector: 'modal-exam-block',
     standalone: true,
     imports: [CommonModule],
     styleUrls: ['./modalStyles/ModalTicketTest.css'],
 	template: `
+    <ng-container *ngIf="expired">
+        <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+            <button type="button" class="btn btn-primary" (click)="redirectAfterExpired()">Перезагрузите страницу</button>
+            <p style="text-align: center;">
+                Кажется ваша предыдущая сессия была внезапно прервана, результаты были записаны на момент выхода
+            </p>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!started && !expired">
+        <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+            <button type="button" class="btn btn-primary" (click)="start()">Начать попытку</button>
+            <p style="text-align: center;">
+                У вас будет 20 минут на 20 случайных вопросов.
+                <br>Экзамен закончится досрочно, если вы не уложитесь в заданное время.
+                <br>Не выключайте вкладку и не переходите на другие разделы в процессе прохождения.
+            </p>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="started && !expired">
+		<ng-container *ngIf="questionsList.length == 0">
+            <p style="text-align: center;">Пока что вопросов нет.</p>
+        </ng-container>
         <ng-container *ngIf="questionsList.length != 0">
             <div id="ticketModal">
                 <span id="qNum">
@@ -33,10 +55,10 @@ const API_URL: string = environment.apiUrl;
                 <div id="qAnswers">
                     <div class="answer" *ngFor="let a of questionsList[currentQuestionId].answers; let i = index" (click)="answer(a.id)">{{a.text}}</div>
                 </div>
-                <span id="qAddToFavorite" (click)="markAsFav()">
-                    <ng-container *ngIf="!fav">Добавить в избранное</ng-container>
-                    <ng-container *ngIf="fav">Удалить из избранного</ng-container>
-                </span>
+                <div id="timer">
+                    <img src="https://img.icons8.com/windows/32/null/time.png"/>
+                    <div id="remainingTime"></div>
+                </div>
             </ng-container>
             <ng-container *ngIf="finished">
                 <div id="resultBlock">
@@ -48,20 +70,25 @@ const API_URL: string = environment.apiUrl;
                 </div>
             </ng-container>
         </ng-container>
+    </ng-container>
 	`,
 })
-export class ModalMarathonBlock {
+export class ModalExamBlock {
     @Input() questionsList : any;
     currentQuestionId: number;
     finished: boolean;
     fav!: boolean;
     correctAnswers: number;
+    started: boolean;
+    expired: boolean;
 
     constructor(private http : HttpClient,
         private router: Router) {
         this.currentQuestionId = 0;
         this.correctAnswers = 0;
         this.finished = false;
+        this.started = false;
+        this.expired = false;
     }
 
     ngOnInit() {
@@ -75,8 +102,50 @@ export class ModalMarathonBlock {
         this.router.navigate(['/profile'], { queryParams: {state : 'errors'}}).then(() => {window.location.reload();});
     }
 
+    redirectAfterExpired() {
+        this.finished = true;
+
+        this.questionsList[this.currentQuestionId].status = 'FALSE';
+        this.http.post<any>(API_URL + '/api/question/answer', this.questionsList , AuthService.getJwtHeader())
+        .subscribe((result: any) => {this.router.navigate(['/profile']).then(() => {window.location.reload();});},(error: HttpErrorResponse) => {console.log(error.error);});
+    }
+
     toMain() {
         this.router.navigate(['/profile']).then(() => {window.location.reload();});
+    }
+
+    start() {
+        this.finished = false;
+        this.started = true;
+
+        let timer = 10 * 1; // * 20 min * 60
+        let displayMin, displaySec;
+        setInterval( () => {
+            let minutes = timer / 60;
+            let seconds = timer % 60;
+
+            displayMin = minutes < 10 ? "0" + Math.floor(minutes) : Math.floor(minutes);
+            displaySec = seconds < 10 ? "0" + Math.floor(seconds) : Math.floor(seconds);
+
+            document.getElementById("remainingTime")!.innerHTML = displayMin + ":" + displaySec;
+
+            if (--timer < 0) {
+                document.getElementById("remainingTime")!.innerHTML = "EXPIRED";
+                this.finished = true;
+                this.questionsList[this.currentQuestionId].status = 'FALSE';
+                this.http.post<any>(API_URL + '/api/question/answer', this.questionsList , AuthService.getJwtHeader())
+                .subscribe((result: any) => {console.log(result);},(error: HttpErrorResponse) => {console.log(error.error);});
+            }
+        }, 1000);
+
+        this.http.post<any>(API_URL + '/api/question/runExam', "" , AuthService.getJwtHeader())
+        .subscribe((result: any) => {
+            console.log(result);
+        },
+        (error: HttpErrorResponse) => {
+            this.expired = true;
+            return;
+        });
     }
 
     markAsFav() {

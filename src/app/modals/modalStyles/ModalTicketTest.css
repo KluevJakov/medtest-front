@@ -122,3 +122,19 @@
     justify-content: center;
     align-items: center;
 }
+
+#timer {
+    border: 1px solid gray;
+    padding: 5px;
+    border-radius: 10px;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+#remainingTime {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

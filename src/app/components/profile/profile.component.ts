@@ -12,6 +12,7 @@ import { ModalTicketTest } from 'src/app/modals/ModalTicketTest';
 import { ActivatedRoute } from '@angular/router';
 import { TimeService } from 'src/app/servises/time.service';
 import { Question } from 'src/app/models/question';
+import { Stat } from 'src/app/models/stat';
 
 const API_URL: string = environment.apiUrl;
 
@@ -28,6 +29,7 @@ export class ProfileComponent implements OnInit {
   themesList!: Array<Theme>;
   ticketsList!: Array<Ticket>;
   questionsList!: Array<Question>;
+  statList!: Array<Stat>;
   state?: State = new State("TEST");
   displayState?: string = "";
   progressWidth?: string;
@@ -41,6 +43,18 @@ export class ProfileComponent implements OnInit {
     .subscribe(
       (result: any) => {
         this.user = new User(result);
+
+        if (this.user.roles[0].systemName == 'ADMIN') {
+          this.http.get<any>(API_URL + '/stat', AuthService.getJwtHeader())
+          .subscribe(
+            (result: any) => {
+              this.statList = result;
+            },
+            (error: HttpErrorResponse) => {
+              console.log(error.error);
+            }
+          );
+        }
       },
       (error: HttpErrorResponse) => {
         console.log(error.error);
@@ -122,6 +136,8 @@ export class ProfileComponent implements OnInit {
   exam() {
     this.state!.state = "EXAM";
     this.displayState = "Экзамен";
+    this.http.get<any>(API_URL + '/api/question/getExam', AuthService.getJwtHeader())
+    .subscribe((result: any) => {this.questionsList = result;},(error: HttpErrorResponse) => {console.log(error.error);});
   }
 
   marathon() {
