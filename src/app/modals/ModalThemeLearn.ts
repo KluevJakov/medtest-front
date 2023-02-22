@@ -15,7 +15,9 @@ const API_URL: string = environment.apiUrl;
 			<button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
 		</div>
 		<div class="modal-body">
-			<p>{{text}}</p>
+      <div>
+        {{text}}
+      </div>
 		</div>
 		<div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="choiseMethod()">{{this.textButton}}</button>

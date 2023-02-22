@@ -156,7 +156,7 @@ export class ProfileComponent implements OnInit {
 
   //открывашки модальных окон
   openThemeLearnModal(text : any, id : any, learned: any) {
-    const modalRef = this.modalService.open(ModalThemeLearn, {fullscreen: true});
+    const modalRef = this.modalService.open(ModalThemeLearn, {size: 'xl'});
 		modalRef.componentInstance.text = text;
     modalRef.componentInstance.id = id;
     modalRef.componentInstance.learned = learned;
