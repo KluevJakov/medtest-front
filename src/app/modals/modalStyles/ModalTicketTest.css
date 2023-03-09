@@ -138,3 +138,11 @@
     justify-content: center;
     align-items: center;
 }
+
+.modal-body {
+    background: white;
+}
+
+.btn-main-grey {
+    background: #e3e3e3;
+}

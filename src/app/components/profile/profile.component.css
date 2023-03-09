@@ -61,6 +61,7 @@
 .BottomBlock {
     background-color: #EFF1F4;
     height: 80%;
+    min-width: 1070px;
 }
 
 #themesDataList {

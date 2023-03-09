@@ -7,7 +7,7 @@
     <div class="container d-flex justify-content-center align-items-center" style="background-color: white; width:auto; border-radius: 10px; padding: 40px;">
         <form [formGroup] = "formLogin" (ngSubmit) = "login()" method = "POST" class="d-flex flex-column" style="width: 100%; border-radius: 10px;" ngNativeValidate>
             <input class="inpt" type="login" placeholder="Логин" formControlName="login" required>
-            <input class="inpt" type="password" id="password" placeholder="Пароль" formControlName="password" minlength="8" maxlength="20" required>
+            <input class="inpt" type="password" id="password" placeholder="Пароль" formControlName="password" minlength="4" maxlength="20" required>
             <button class="inpt btn-reg-log" type="submit">Войти</button>
             <span *ngIf="hasError" class="alert alert-warning" role="alert">{{errorMsg}}</span>
         </form>
