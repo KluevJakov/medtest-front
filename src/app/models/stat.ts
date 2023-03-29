@@ -2,7 +2,7 @@ export class Stat {
     public id!: number;
     public name: string;
     public errorCount: number;
-    public lastPass: Date;
+    public lastPass: number;
   
     constructor(stat:any){
       this.id = stat.id;

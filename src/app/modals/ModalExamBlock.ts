@@ -81,6 +81,7 @@ export class ModalExamBlock {
     correctAnswers: number;
     started: boolean;
     expired: boolean;
+    startTime!: Date;
 
     constructor(private http : HttpClient,
         private router: Router) {
@@ -117,6 +118,7 @@ export class ModalExamBlock {
     start() {
         this.finished = false;
         this.started = true;
+        this.startTime = new Date();
 
         let timer = 10 * 1; // * 20 min * 60
         let displayMin, displaySec;

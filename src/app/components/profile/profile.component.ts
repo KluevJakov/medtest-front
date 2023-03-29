@@ -168,4 +168,22 @@ export class ProfileComponent implements OnInit {
     modalRef.componentInstance.ticket = ticket;
     modalRef.result.then((result) => {if (result) { this.tickets() }});
   }
+
+  //служебный метод
+  fancyTimeFormat(duration: number) {
+    const hrs = ~~(duration / 3600);
+    const mins = ~~((duration % 3600) / 60);
+    const secs = ~~duration % 60;
+  
+    let ret = "";
+  
+    if (hrs > 0) {
+      ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+    }
+  
+    ret += "" + mins + " мин ";
+    ret += "" + secs + " сек";
+  
+    return ret;
+  }
 }

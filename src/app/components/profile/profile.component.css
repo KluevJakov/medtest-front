@@ -86,7 +86,7 @@
 
 
 #ticketsDataList {
-    width: 60%;
+    width: 90%;
 }
 
 .ticketNum {
@@ -108,6 +108,7 @@
     align-items: center;
     cursor: pointer;
     transition: .4s;
+    width: 100%;
 }
 
 .ticketsElem:hover {
@@ -134,4 +135,28 @@
 
 .prgrs {
     transition: 1s;
+}
+
+#admFragment {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+#leftFragment {
+    width: 50%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    min-width: 550px;
+}
+
+#rightFragment {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    min-width: 550px;
 }
