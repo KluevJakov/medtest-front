@@ -15,6 +15,8 @@ import { ModalThemeBlock } from "./modals/ModalThemeBlock";
 import { ModalFavoriteBlock } from "./modals/ModalFavoriteBlock";
 import { ModalMarathonBlock } from "./modals/ModalMarathonBlock";
 import { ModalExamBlock } from "./modals/ModalExamBlock";
+import { ModalCreateQuestion } from './modals/ModalCreateQuestion';
+import { ModalCreateAnswer } from './modals/ModalCreateAnswer';
 
 @NgModule({
     declarations: [
@@ -38,7 +40,9 @@ import { ModalExamBlock } from "./modals/ModalExamBlock";
         ModalThemeBlock,
         ModalFavoriteBlock,
         ModalMarathonBlock,
-        ModalExamBlock
+        ModalExamBlock,
+        ModalCreateQuestion,
+        ModalCreateAnswer
     ]
 })
 export class AppModule { }

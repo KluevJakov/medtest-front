@@ -120,7 +120,7 @@ export class ModalExamBlock {
         this.started = true;
         this.startTime = new Date();
 
-        let timer = 10 * 1; // * 20 min * 60
+        let timer = 20 * 1; // * 20 min * 60
         let displayMin, displaySec;
         setInterval( () => {
             let minutes = timer / 60;

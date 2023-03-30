@@ -45,10 +45,10 @@ const API_URL: string = environment.apiUrl;
             </ng-container>
             <ng-container *ngIf="finished">
                 <div id="resultBlock">
-                    <div id="result">{{correctAnswers}}/5</div>
-                    <div *ngIf="correctAnswers == 5" id="resultAdvice">ОТЛИЧНО</div>
-                    <div *ngIf="correctAnswers != 5" id="resultAdvice">ТРЕНИРУЙТЕСЬ</div>
-                    <button *ngIf="correctAnswers != 5" type="button" class="btn btn-primary" (click)="redirectToMistakes()">Мои ошибки</button>
+                    <div id="result">{{correctAnswers}}/{{theme.questions.length}}</div>
+                    <div *ngIf="correctAnswers == theme.questions.length" id="resultAdvice">ОТЛИЧНО</div>
+                    <div *ngIf="correctAnswers != theme.questions.length" id="resultAdvice">ТРЕНИРУЙТЕСЬ</div>
+                    <button *ngIf="correctAnswers != theme.questions.length" type="button" class="btn btn-primary" (click)="redirectToMistakes()">Мои ошибки</button>
                     <div id="replay" (click)="replay()">Пройти ещё раз</div>
                 </div>
             </ng-container>
@@ -91,7 +91,7 @@ export class ModalThemeTest {
     }
 
     areYouSure () {
-        if (this.currentQuestionId != 4) {
+        if (this.currentQuestionId != this.theme.questions.length-1) {
             const modalRef = this.modalService.open(AreYouSure, { centered: true, size: 'sm' });
             modalRef.result.then((result) => {
                 if (result == 'YES') {
@@ -115,7 +115,7 @@ export class ModalThemeTest {
                 }
             }
         }
-        if (this.currentQuestionId != 4) {
+        if (this.currentQuestionId != this.theme.questions.length-1) {
             this.currentQuestionId++;
             this.fav = this.theme.questions[this.currentQuestionId].favorite;
             this.theme.questions[this.currentQuestionId].status = 'CURRENT';

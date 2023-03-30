@@ -13,6 +13,8 @@ import { ActivatedRoute } from '@angular/router';
 import { TimeService } from 'src/app/servises/time.service';
 import { Question } from 'src/app/models/question';
 import { Stat } from 'src/app/models/stat';
+import { ModalCreateQuestion } from 'src/app/modals/ModalCreateQuestion';
+import { ModalCreateAnswer } from 'src/app/modals/ModalCreateAnswer';
 
 const API_URL: string = environment.apiUrl;
 
@@ -44,17 +46,7 @@ export class ProfileComponent implements OnInit {
       (result: any) => {
         this.user = new User(result);
 
-        if (this.user.roles[0].systemName == 'ADMIN') {
-          this.http.get<any>(API_URL + '/stat', AuthService.getJwtHeader())
-          .subscribe(
-            (result: any) => {
-              this.statList = result;
-            },
-            (error: HttpErrorResponse) => {
-              console.log(error.error);
-            }
-          );
-        }
+        if (this.user.roles[0].systemName == 'ADMIN') { this.admFeautures(); }
       },
       (error: HttpErrorResponse) => {
         console.log(error.error);
@@ -185,5 +177,42 @@ export class ProfileComponent implements OnInit {
     ret += "" + secs + " сек";
   
     return ret;
+  }
+
+  admFeautures() {
+    this.http.get<any>(API_URL + '/stat', AuthService.getJwtHeader()).subscribe((result: any) => {this.statList = result; },(error: HttpErrorResponse) => { console.log(error.error);});
+    this.http.get<any>(API_URL + '/api/ticket/getAll', AuthService.getJwtHeader()).subscribe((result: any) => {this.ticketsList = result;},(error: HttpErrorResponse) => {console.log(error.error);});
+  }
+
+  createTicket() {
+    this.http.post<any>(API_URL + '/api/ticket/create', null, AuthService.getJwtHeader())
+      .subscribe((result: any) => {this.admFeautures()},(error: HttpErrorResponse) => {console.log(error.error);});
+  }
+
+  deleteTicket(id: number) {
+    this.http.delete<any>(API_URL + '/api/ticket/delete/'+id, AuthService.getJwtHeader())
+      .subscribe((result: any) => {this.admFeautures()},(error: HttpErrorResponse) => {console.log(error.error);});
+  }
+
+  createQuestion(id: number) {
+    const modalRef = this.modalService.open(ModalCreateQuestion);
+    modalRef.componentInstance.ticket_id = id;
+    modalRef.result.then((result) => {this.admFeautures()});
+  }
+
+  deleteQuestion(id: number) {
+    this.http.delete<any>(API_URL + '/api/question/delete/'+id, AuthService.getJwtHeader())
+      .subscribe((result: any) => {this.admFeautures()},(error: HttpErrorResponse) => {console.log(error.error);});
+  }
+
+  createAnswer(id: number) {
+    const modalRef = this.modalService.open(ModalCreateAnswer);
+    modalRef.componentInstance.question_id = id;
+    modalRef.result.then((result) => {this.admFeautures()});
+  }
+
+  deleteAnswer(id: number) {
+    this.http.delete<any>(API_URL + '/api/answer/delete/'+id, AuthService.getJwtHeader())
+      .subscribe((result: any) => {this.admFeautures()},(error: HttpErrorResponse) => {console.log(error.error);});
   }
 }

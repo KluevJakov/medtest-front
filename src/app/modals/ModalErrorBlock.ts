@@ -14,10 +14,10 @@ const API_URL: string = environment.apiUrl;
     imports: [CommonModule],
     styleUrls: ['./modalStyles/ModalTicketTest.css'],
 	template: `
-		<ng-container *ngIf="questionsList.length == 0">
+		<ng-container *ngIf="questionsList && questionsList.length == 0">
             <p style="text-align: center;">Здесь появятся вопросы, требующие повторной отработки.</p>
         </ng-container>
-        <ng-container *ngIf="questionsList.length != 0">
+        <ng-container *ngIf="questionsList && questionsList.length != 0">
             <div id="ticketModal">
                 <span id="qNum">
                     <div class="qNumE" *ngFor="let q of questionsList; let i = index">
@@ -69,8 +69,8 @@ export class ModalErrorBlock {
 
     ngOnInit() {
         setTimeout(() => {
-        this.questionsList[this.currentQuestionId].status = 'CURRENT';
-        this.fav = this.questionsList[this.currentQuestionId].favorite
+            this.questionsList[this.currentQuestionId].status = 'CURRENT';
+            this.fav = this.questionsList[this.currentQuestionId].favorite
         }, 200);
     }
 

@@ -7,7 +7,7 @@
                 <div style="color: #BABABD;margin-bottom: 30px;margin-top: 30px;">Статистика по последним прохождениям:</div>
                 <div style="min-height: 120px; min-height: 120px;width: 100%;display: flex;justify-content: center;">
                     <div id="ticketsDataList">
-                        <div *ngIf="statList"
+                        <div *ngIf="statList && statList.length == 0"
                             style="color: #BABABD;margin-bottom: 30px;text-align: center;">Результатов пока нет.. </div>
                         <div *ngFor="let t of statList; let i = index" class="ticketsElem">
                             <span *ngIf="t.errorCount == 0" class="ticketNum ticketStatusColorNum2">{{t.id}}</span>
@@ -22,7 +22,41 @@
                 </div>
             </div>
             <div id="rightFragment">
-                Hello
+                <div style="color: #BABABD;margin-bottom: 30px;margin-top: 30px;">Конструктор билетов:</div>
+                <button type="button" class="btn btn-outline-primary btn-sm" style="align-self: flex-start;" (click)="createTicket()">Создать билет</button>
+                <div class="w-100" id="ticketsBlock">
+                    <ngb-accordion [closeOthers]="true" activeIds="static-0">
+                        <ngb-panel *ngFor="let t of ticketsList; let i = index" id="static-{{i}}" title="{{'Билет ' + t.id}}">
+                            <ng-template ngbPanelContent>
+                                Вопросы:
+                                <ngb-accordion [closeOthers]="true">
+                                    <ngb-panel *ngFor="let q of t.questions; let j = index" title="{{q.text}}">
+                                        <ng-template ngbPanelContent>
+                                            Ответы: 
+                                            <ngb-accordion [closeOthers]="true">
+                                                <ngb-panel *ngFor="let a of q.answers; let k = index" title="{{a.correct ? a.text + ' - ' + 'Верный' : a.text + ' - ' + 'Неверный'}}">
+                                                    <ng-template ngbPanelContent>
+                                                        <div style="margin-top: 10px;">
+                                                            <button type="button" class="btn btn-outline-danger btn-sm" style="align-self: flex-start; margin-right: 10px;" (click)="deleteAnswer(a.id)">Удалить ответ</button>
+                                                        </div>
+                                                    </ng-template>
+                                                </ngb-panel>
+                                            </ngb-accordion>
+                                            <div style="margin-top: 10px;">
+                                                <button type="button" class="btn btn-outline-danger btn-sm" style="align-self: flex-start; margin-right: 10px;" (click)="deleteQuestion(q.id)">Удалить вопрос</button>
+                                                <button type="button" class="btn btn-outline-primary btn-sm" style="align-self: flex-start;" (click)="createAnswer(q.id)">Создать ответ</button>
+                                            </div>
+                                        </ng-template>
+                                    </ngb-panel>
+                                </ngb-accordion>
+                                <div style="margin-top: 10px;">
+                                    <button type="button" class="btn btn-outline-danger btn-sm" style="align-self: flex-start; margin-right: 10px;" (click)="deleteTicket(t.id)">Удалить билет</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" style="align-self: flex-start;" (click)="createQuestion(t.id)">Создать вопрос</button>
+                                </div>
+                            </ng-template>
+                        </ngb-panel>
+                    </ngb-accordion>
+                </div>
             </div>
         </div>
     </ng-container>
