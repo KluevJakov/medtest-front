@@ -85,7 +85,7 @@ export class ModalAnatomyCheck {
         };
 
         this.http.post<any>(API_URL + '/test', test, AuthService.getJwtHeader())
-      .subscribe((result: any) => { document.getElementById('res')!.innerHTML = result; }, (error: HttpErrorResponse) => { console.log(error.error); });
+      .subscribe((result: any) => { document.getElementById('res')!.innerHTML = result.text; }, (error: HttpErrorResponse) => { console.log(error.error); });
     }
 
     show(text: string) {
