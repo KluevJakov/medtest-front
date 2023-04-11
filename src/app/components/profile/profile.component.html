@@ -1,61 +1,135 @@
 <div *ngIf="user" class="container-fluid d-flex flex-column justify-content-center align-items-center"
     style="padding: 0; height: 100%; min-height: 500px;">
 
-    <ng-container *ngIf="user.roles[0].systemName == 'ADMIN'">
+    <ng-container *ngIf="user.roles[0].systemName == 'ADMIN' || user.roles[0].systemName == 'TEACHER'">
         <div id="admFragment">
             <div id="leftFragment">
-                <div style="color: #BABABD;margin-bottom: 30px;margin-top: 30px;">Статистика по последним прохождениям:</div>
+                <div style="color: #BABABD;margin-bottom: 30px;margin-top: 30px;">Статистика по последним прохождениям:
+                </div>
                 <div style="min-height: 120px; min-height: 120px;width: 100%;display: flex;justify-content: center;">
                     <div id="ticketsDataList">
                         <div *ngIf="statList && statList.length == 0"
                             style="color: #BABABD;margin-bottom: 30px;text-align: center;">Результатов пока нет.. </div>
-                        <div *ngFor="let t of statList; let i = index" class="ticketsElem">
-                            <span *ngIf="t.errorCount == 0" class="ticketNum ticketStatusColorNum2">{{t.id}}</span>
-                            <span *ngIf="t.errorCount != 0" class="ticketNum ticketStatusColorNum3">{{t.id}}</span>
-                            <div style="width: 100%;display: flex;justify-content: space-between;font-size: x-large;">
-                                <span *ngIf="t.name != null" style="padding-left: 15px;">{{t.name}}</span>
-                                <span *ngIf="t.errorCount!= null" style="padding-left: 15px;">Ошибок:{{t.errorCount}}</span>
-                                <span *ngIf="t.lastPass != null" style="padding-left: 15px;">{{fancyTimeFormat(t.lastPass)}}</span>
-                            </div>
+                        <div class="d-flex mb-1" style="text-align: center;">
+                            <input type="text" class="form-control" placeholder="Логин" id="loginStatParam" (keyup)="changeSearchStat()">
+                            <input type="text" class="form-control" placeholder="Группа" id="groupStatParam" (keyup)="changeSearchStat()">
+                            <input type="date" class="form-control" id="dateStatParam" (change)="changeSearchStat()">
+                            <input type="number" min="0" class="form-control" id="sizeStatParam" placeholder="Выборка" (input)="changeSearchStat()">
                         </div>
+                        <table class="table table-bordered" id="statSort">
+                            <thead>
+                                <tr>
+                                    <th scope="col" (click)="sortColumn(0, 'statSort')">#</th>
+                                    <th scope="col" (click)="sortColumn(1, 'statSort')">Логин</th>
+                                    <th scope="col" (click)="sortColumn(2, 'statSort')">Группа</th>
+                                    <th scope="col" (click)="sortColumn(3, 'statSort')">Ошибок</th>
+                                    <th scope="col" (click)="sortColumn(4, 'statSort')">Время прохождения</th>
+                                    <th scope="col" (click)="sortColumn(5, 'statSort')">Дата</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let t of statList; let i = index" class="ticketsElem">
+                                    <tr>
+                                        <td *ngIf="t.errorCount == 0" class="ticketNum ticketStatusColorNum2">{{i+1}}
+                                        </td>
+                                        <td *ngIf="t.errorCount != 0" class="ticketNum ticketStatusColorNum3">{{i+1}}
+                                        </td>
+                                        <td>{{t.name}}</td>
+                                        <td>{{t.groupp}}</td>
+                                        <td>{{t.errorCount}}</td>
+                                        <td>{{fancyTimeFormat(t.lastPass)}}</td>
+                                        <td>{{formatterdate(t.passDate)}}</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <div id="rightFragment">
-                <div style="color: #BABABD;margin-bottom: 30px;margin-top: 30px;">Конструктор билетов:</div>
-                <button type="button" class="btn btn-outline-primary btn-sm" style="align-self: flex-start;" (click)="createTicket()">Создать билет</button>
-                <div class="w-100" id="ticketsBlock">
-                    <ngb-accordion [closeOthers]="true" activeIds="static-0">
-                        <ngb-panel *ngFor="let t of ticketsList; let i = index" id="static-{{i}}" title="{{'Билет ' + t.id}}">
-                            <ng-template ngbPanelContent>
-                                Вопросы:
-                                <ngb-accordion [closeOthers]="true">
-                                    <ngb-panel *ngFor="let q of t.questions; let j = index" title="{{q.text}}">
-                                        <ng-template ngbPanelContent>
-                                            Ответы: 
-                                            <ngb-accordion [closeOthers]="true">
-                                                <ngb-panel *ngFor="let a of q.answers; let k = index" title="{{a.correct ? a.text + ' - ' + 'Верный' : a.text + ' - ' + 'Неверный'}}">
-                                                    <ng-template ngbPanelContent>
-                                                        <div style="margin-top: 10px;">
-                                                            <button type="button" class="btn btn-outline-danger btn-sm" style="align-self: flex-start; margin-right: 10px;" (click)="deleteAnswer(a.id)">Удалить ответ</button>
-                                                        </div>
-                                                    </ng-template>
-                                                </ngb-panel>
-                                            </ngb-accordion>
-                                            <div style="margin-top: 10px;">
-                                                <button type="button" class="btn btn-outline-danger btn-sm" style="align-self: flex-start; margin-right: 10px;" (click)="deleteQuestion(q.id)">Удалить вопрос</button>
-                                                <button type="button" class="btn btn-outline-primary btn-sm" style="align-self: flex-start;" (click)="createAnswer(q.id)">Создать ответ</button>
-                                            </div>
-                                        </ng-template>
-                                    </ngb-panel>
-                                </ngb-accordion>
-                                <div style="margin-top: 10px;">
-                                    <button type="button" class="btn btn-outline-danger btn-sm" style="align-self: flex-start; margin-right: 10px;" (click)="deleteTicket(t.id)">Удалить билет</button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm" style="align-self: flex-start;" (click)="createQuestion(t.id)">Создать вопрос</button>
-                                </div>
-                            </ng-template>
-                        </ngb-panel>
-                    </ngb-accordion>
+            <div id="rightFragment" *ngIf="user.roles[0].systemName == 'ADMIN'">
+                <div id="constructor">
+                    <div style="color: #BABABD;margin-bottom: 30px;margin-top: 30px;">Конструктор билетов:</div>
+                    <button type="button" class="btn btn-outline-primary btn-sm" style="align-self: flex-start;"
+                        (click)="createTicket()">Создать билет</button>
+                    <div class="w-100" id="ticketsBlock">
+                        <ngb-accordion [closeOthers]="true" activeIds="static-0">
+                            <ngb-panel *ngFor="let t of ticketsList; let i = index" id="static-{{i}}"
+                                title="{{'Билет ' + t.id}}">
+                                <ng-template ngbPanelContent>
+                                    Вопросы:
+                                    <ngb-accordion [closeOthers]="true">
+                                        <ngb-panel *ngFor="let q of t.questions; let j = index" title="{{q.text}}">
+                                            <ng-template ngbPanelContent>
+                                                Ответы:
+                                                <ngb-accordion [closeOthers]="true">
+                                                    <ngb-panel *ngFor="let a of q.answers; let k = index"
+                                                        title="{{a.correct ? a.text + ' - ' + 'Верный' : a.text + ' - ' + 'Неверный'}}">
+                                                        <ng-template ngbPanelContent>
+                                                            <div style="margin-top: 10px;">
+                                                                <button type="button"
+                                                                    class="btn btn-outline-danger btn-sm"
+                                                                    style="align-self: flex-start; margin-right: 10px;"
+                                                                    (click)="deleteAnswer(a.id)">Удалить ответ</button>
+                                                            </div>
+                                                        </ng-template>
+                                                    </ngb-panel>
+                                                </ngb-accordion>
+                                                <div style="margin-top: 10px;">
+                                                    <button type="button" class="btn btn-outline-danger btn-sm"
+                                                        style="align-self: flex-start; margin-right: 10px;"
+                                                        (click)="deleteQuestion(q.id)">Удалить вопрос</button>
+                                                    <button type="button" class="btn btn-outline-primary btn-sm"
+                                                        style="align-self: flex-start;"
+                                                        (click)="createAnswer(q.id)">Создать
+                                                        ответ</button>
+                                                </div>
+                                            </ng-template>
+                                        </ngb-panel>
+                                    </ngb-accordion>
+                                    <div style="margin-top: 10px;">
+                                        <button type="button" class="btn btn-outline-danger btn-sm"
+                                            style="align-self: flex-start; margin-right: 10px;"
+                                            (click)="deleteTicket(t.id)">Удалить билет</button>
+                                        <button type="button" class="btn btn-outline-primary btn-sm"
+                                            style="align-self: flex-start;" (click)="createQuestion(t.id)">Создать
+                                            вопрос</button>
+                                    </div>
+                                </ng-template>
+                            </ngb-panel>
+                        </ngb-accordion>
+                    </div>
+                </div>
+
+                <div id="userControl">
+                    <div style="color: #BABABD;margin-bottom: 30px;margin-top: 30px;">Управление пользователями:</div>
+                    <div *ngIf="userList && userList.length == 0"
+                        style="color: #BABABD;margin-bottom: 30px;text-align: center;">Результатов пока нет.. </div>
+                    <div *ngIf="statList && statList.length != 0" class="d-flex mb-1" style="text-align: center;">
+                        <input type="text" class="form-control" placeholder="Логин" id="loginUserParam" (keyup)="changeSearchUser()">
+                        <input type="text" class="form-control" placeholder="Группа" id="groupUserParam" (keyup)="changeSearchUser()">
+                        <input type="text" class="form-control" placeholder="Роль" id="roleUserParam" (keyup)="changeSearchUser()">
+                        <input type="number" min="0" class="form-control" id="sizeUserParam" placeholder="Выборка" (input)="changeSearchUser()">
+                    </div>
+                    <table class="table table-bordered" id="userSort">
+                        <thead>
+                            <tr>
+                                <th scope="col" (click)="sortColumn(0, 'userSort')">#</th>
+                                <th scope="col" (click)="sortColumn(1, 'userSort')">Логин</th>
+                                <th scope="col" (click)="sortColumn(2, 'userSort')">Группа</th>
+                                <th scope="col" (click)="sortColumn(3, 'userSort')">Роль</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let t of userList; let i = index" class="ticketsElem">
+                                <tr (click)="editUser(t)">
+                                    <td>{{i+1}}</td>
+                                    <td>{{t.login}}</td>
+                                    <td>{{t.groupp}}</td>
+                                    <td>{{t.roles[0].displayName}}</td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -88,6 +162,7 @@
         <div *ngIf="this.state?.state == 'TRAIN'"
             class="container-fluid d-flex flex-row justify-content-evenly align-items-center BottomBlock">
             <div id="trainsList">
+                <button class="btn btn-success" (click)="anatomy()">Изучение анатомии уха</button>
                 <div *ngFor="let t of themesList; let i = index" class="trainElem"><span class="trainInner"
                         (click)="openThemeLearnModal(t.text, t.id, t.learned)">
                         <span>{{i+1}}. {{t.title}}</span>
@@ -101,6 +176,7 @@
         <div *ngIf="this.state?.state == 'TICKET'"
             class="container-fluid d-flex flex-row justify-content-evenly align-items-center BottomBlock">
             <div id="ticketsList" class="questionBlock">
+                <button class="btn btn-success" (click)="anatomyCheck()">Проверка знаний по анатомии уха</button>
                 <h2>{{displayState}}</h2>
                 <hr>
                 <div class="progress" style="width: 40%; height: 10px;">
