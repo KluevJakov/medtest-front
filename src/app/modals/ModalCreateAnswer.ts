@@ -3,7 +3,6 @@ import { Component, ViewEncapsulation } from "@angular/core";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { environment } from "src/environments/environment";
 import { Answer } from "../models/answer";
-import { Question } from "../models/question";
 import { AuthService } from "../servises/auth.service";
 
 

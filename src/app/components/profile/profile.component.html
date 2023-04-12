@@ -52,7 +52,7 @@
                     <button type="button" class="btn btn-outline-primary btn-sm" style="align-self: flex-start;"
                         (click)="createTicket()">Создать билет</button>
                     <div class="w-100" id="ticketsBlock">
-                        <ngb-accordion [closeOthers]="true" activeIds="static-0">
+                        <ngb-accordion [closeOthers]="true">
                             <ngb-panel *ngFor="let t of ticketsList; let i = index" id="static-{{i}}"
                                 title="{{'Билет ' + t.id}}">
                                 <ng-template ngbPanelContent>
@@ -104,7 +104,7 @@
                     <div style="color: #BABABD;margin-bottom: 30px;margin-top: 30px;">Управление пользователями:</div>
                     <div *ngIf="userList && userList.length == 0"
                         style="color: #BABABD;margin-bottom: 30px;text-align: center;">Результатов пока нет.. </div>
-                    <div *ngIf="statList && statList.length != 0" class="d-flex mb-1" style="text-align: center;">
+                    <div *ngIf="userList && userList.length != 0" class="d-flex mb-1" style="text-align: center;">
                         <input type="text" class="form-control" placeholder="Логин" id="loginUserParam" (keyup)="changeSearchUser()">
                         <input type="text" class="form-control" placeholder="Группа" id="groupUserParam" (keyup)="changeSearchUser()">
                         <input type="text" class="form-control" placeholder="Роль" id="roleUserParam" (keyup)="changeSearchUser()">

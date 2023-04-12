@@ -1,12 +1,10 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../servises/auth.service';
 import { CommonModule } from '@angular/common';
-import { Answer } from '../models/answer';
 import { Router } from '@angular/router';
-import { Role } from '../models/role';
 
 const API_URL: string = environment.apiUrl;
 

@@ -191,7 +191,7 @@ export class ProfileComponent implements OnInit {
     }
     let ddate = new Date(date);
     let result = (ddate.getHours() < 10 ? "0" : "") + ddate.getHours() + ":" + (ddate.getMinutes() < 10 ? "0" : "") + ddate.getMinutes() + " " +
-      (ddate.getMinutes() < 10 ? "0" : "") + ddate.getDate() + "." + (ddate.getMonth() < 10 ? "0" : "") + (ddate.getMonth() + 1) + "." + ddate.getFullYear();
+      (ddate.getDate() < 10 ? "0" : "") + ddate.getDate() + "." + (ddate.getMonth() < 10 ? "0" : "") + (ddate.getMonth() + 1) + "." + ddate.getFullYear();
 
     return result;
   }
