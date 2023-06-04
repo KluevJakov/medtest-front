@@ -79,7 +79,7 @@ export class ProfileComponent implements OnInit {
   traning() {
     (document.getElementById("mainSwitch") as HTMLInputElement).checked = true;
     this.state!.state = "TRAIN";
-    this.http.get<any>(API_URL + '/api/theme/getAll', AuthService.getJwtHeader())
+    this.http.get<any>(API_URL + '/api/theme/getAllW', AuthService.getJwtHeader())
       .subscribe(
         (result: any) => {
           this.themesList = result;
@@ -120,7 +120,7 @@ export class ProfileComponent implements OnInit {
   themes() {
     this.state!.state = "THEME";
     this.displayState = "Темы";
-    this.http.get<any>(API_URL + '/api/theme/getAll', AuthService.getJwtHeader())
+    this.http.get<any>(API_URL + '/api/theme/getAllW', AuthService.getJwtHeader())
       .subscribe((result: any) => { this.themesList = result; }, (error: HttpErrorResponse) => { console.log(error.error); });
   }
 

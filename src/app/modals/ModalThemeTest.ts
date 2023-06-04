@@ -6,6 +6,7 @@ import { AuthService } from '../servises/auth.service';
 import { CommonModule } from '@angular/common';
 import { Answer } from '../models/answer';
 import { Router } from '@angular/router';
+import { Theme } from '../models/theme';
 
 const API_URL: string = environment.apiUrl;
 
@@ -32,10 +33,10 @@ const API_URL: string = environment.apiUrl;
             </div>
             <hr>
             <ng-container *ngIf="!finished">
-                <div id="qText">
+                <div id="qText" *ngIf="theme && theme.questions">
                     {{theme.questions[currentQuestionId].text}}
                 </div>
-                <div id="qAnswers">
+                <div id="qAnswers" *ngIf="theme && theme.questions">
                     <div class="answer" *ngFor="let a of theme.questions[currentQuestionId].answers; let i = index" (click)="answer(a.id)">{{a.text}}</div>
                 </div>
                 <span id="qAddToFavorite" (click)="markAsFav()">
@@ -44,7 +45,7 @@ const API_URL: string = environment.apiUrl;
                 </span>
             </ng-container>
             <ng-container *ngIf="finished">
-                <div id="resultBlock">
+                <div id="resultBlock" *ngIf="theme && theme.questions">
                     <div id="result">{{correctAnswers}}/{{theme.questions.length}}</div>
                     <div *ngIf="correctAnswers == theme.questions.length" id="resultAdvice">ОТЛИЧНО</div>
                     <div *ngIf="correctAnswers != theme.questions.length" id="resultAdvice">ТРЕНИРУЙТЕСЬ</div>
@@ -56,7 +57,7 @@ const API_URL: string = environment.apiUrl;
 	`,
 })
 export class ModalThemeTest {
-    @Input() theme : any;
+    @Input() theme!: Theme;
     currentQuestionId: number;
     finished: boolean;
     fav!: boolean;
@@ -66,14 +67,21 @@ export class ModalThemeTest {
         public activeModal: NgbActiveModal, 
         private modalService: NgbModal, 
         private router: Router) {
-        this.currentQuestionId = 0;
-        this.correctAnswers = 0;
-        this.finished = false;
+            this.currentQuestionId = 0;
+            this.correctAnswers = 0;
+            this.finished = false;
     }
 
     ngOnInit() {
+        console.log(this.theme);
+        this.http.get<any>(API_URL + '/api/theme?id='+this.theme.id, AuthService.getJwtHeader())
+      .subscribe((result: any) => { 
+        console.log(result);
+        this.theme = result;
         this.theme.questions[this.currentQuestionId].status = 'CURRENT';
         this.fav = this.theme.questions[this.currentQuestionId].favorite;
+    }, (error: HttpErrorResponse) => { console.log(error.error); });
+        
     }
 
     redirectToMistakes() {

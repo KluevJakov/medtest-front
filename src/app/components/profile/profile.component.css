@@ -90,13 +90,14 @@
 }
 
 .ticketNum {
-    height: 50px;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
     font-size: xx-large;
     font-weight: bold;
+    width: 70px;
 }
 
 .ticketsElem {

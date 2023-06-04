@@ -17,7 +17,7 @@ const API_URL: string = environment.apiUrl;
     template: `
 		<div class="modal-header">
 			<h4 class="modal-title">Редактирование пользователя: </h4>
-			<button type="button" class="btn-close" aria-label="Close"></button>
+			<button type="button" class="btn-close" aria-label="Close" (click)="activeModal.close()"></button>
 		</div>
 		<div class="modal-body">
             <input class="form-control mb-2" type="text" placeholder="Логин" id="login" value="{{user.login}}">

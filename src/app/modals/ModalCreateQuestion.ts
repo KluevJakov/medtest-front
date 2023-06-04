@@ -41,8 +41,11 @@ export class ModalCreateQuestion {
     themes!: Array<Theme>;
 
 	constructor(private modalService: NgbActiveModal, private http : HttpClient) {
-        this.http.get<any>(API_URL + '/api/theme/getAll', AuthService.getJwtHeader())
-            .subscribe((result: any) => {this.themes = result;},(error: HttpErrorResponse) => {console.log(error.error);});
+        this.http.get<any>(API_URL + '/api/theme/getAllW', AuthService.getJwtHeader())
+            .subscribe((result: any) => {
+                this.themes = result;
+                console.log(this.themes);
+            },(error: HttpErrorResponse) => {console.log(error.error);});
     }
     
     continue () {

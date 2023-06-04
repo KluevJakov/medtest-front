@@ -1,15 +1,16 @@
 #qNum {
     display: flex;
     width: 50%;
-    justify-content: space-around;
+    overflow-y: auto;
 }
 
 .qNumE {
-    width: 40px;
-    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: 5px;
 }
 .qNumE0 {
     width: 100%;
