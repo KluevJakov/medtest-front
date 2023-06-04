@@ -19,6 +19,9 @@ import { ModalEditUser } from 'src/app/modals/ModalEditUser';
 import { Role } from 'src/app/models/role';
 import { ModalAnatomy } from 'src/app/modals/ModalAnatomy';
 import { ModalAnatomyCheck } from 'src/app/modals/ModalAnatomyCheck';
+import autoTable from 'jspdf-autotable';
+import jsPDF from 'jspdf';
+import '../../../assets/PTSans-Regular-normal'
 
 const API_URL: string = environment.apiUrl;
 
@@ -69,6 +72,16 @@ export class ProfileComponent implements OnInit {
       });
   }
 
+  genDoc() {
+    const doc = new jsPDF();
+    doc.setFont('PTSans-Regular');
+    autoTable(doc, { html: '#statSort', styles: {
+      font: 'PTSans-Regular', 
+      fontStyle: 'normal',
+    },});
+    doc.save('table.pdf');
+  }
+  
   //открывашки категорий
 
   test() {

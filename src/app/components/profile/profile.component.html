@@ -15,6 +15,7 @@
                             <input type="text" class="form-control" placeholder="Группа" id="groupStatParam" (keyup)="changeSearchStat()">
                             <input type="date" class="form-control" id="dateStatParam" (change)="changeSearchStat()">
                             <input type="number" min="0" class="form-control" id="sizeStatParam" placeholder="Выборка" (input)="changeSearchStat()">
+                            <button type="button" class="btn btn-outline-primary" (click)="genDoc()">Выгрузить отчет</button>
                         </div>
                         <table class="table table-bordered" id="statSort">
                             <thead>
