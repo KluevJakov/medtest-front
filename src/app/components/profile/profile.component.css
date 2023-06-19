@@ -189,3 +189,14 @@
 #dateStatParam input::-webkit-date-and-time-value{
     text-align: center;
 }
+
+.addStyle1 {
+    width: 50%;
+display: flex;
+justify-content: space-around;
+}
+
+.indicateBtn {
+    transition: .2s;
+    border: 4px #a6dcec solid;
+}

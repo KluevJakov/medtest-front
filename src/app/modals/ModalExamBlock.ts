@@ -26,7 +26,7 @@ const API_URL: string = environment.apiUrl;
         <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
             <button type="button" class="btn btn-primary" (click)="start()">Начать попытку</button>
             <p style="text-align: center;">
-                У вас будет 20 минут на 20 случайных вопросов.
+                У вас будет 60 минут на 80 случайных вопросов.
                 <br>Экзамен закончится досрочно, если вы не уложитесь в заданное время.
                 <br>Не выключайте вкладку и не переходите на другие разделы в процессе прохождения.
             </p>
@@ -62,9 +62,9 @@ const API_URL: string = environment.apiUrl;
             </ng-container>
             <ng-container *ngIf="finished">
                 <div id="resultBlock">
-                    <div id="result">{{correctAnswers}}/{{questionsList.length}}</div>
-                    <div *ngIf="correctAnswers == questionsList.length" id="resultAdvice">ОТЛИЧНО</div>
-                    <div *ngIf="correctAnswers != questionsList.length" id="resultAdvice">ТРЕНИРУЙТЕСЬ</div>
+                    <div id="result">{{correctAnswers}}/{{questionsList.length}} ({{(correctAnswers/questionsList.length *100).toFixed(0)}}%)</div>
+                    <div *ngIf="correctAnswers >= (questionsList.length * 0.7)" id="resultAdvice">ОТЛИЧНО</div>
+                    <div *ngIf="correctAnswers < (questionsList.length * 0.7)" id="resultAdvice">ТРЕНИРУЙТЕСЬ</div>
                     <button *ngIf="correctAnswers != questionsList.length" type="button" class="btn btn-primary" (click)="redirectToMistakes()">Мои ошибки</button>
                     <button *ngIf="correctAnswers == questionsList.length" type="button" class="btn btn-primary" (click)="toMain()">На главную</button>
                 </div>

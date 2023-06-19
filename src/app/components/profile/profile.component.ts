@@ -258,6 +258,7 @@ export class ProfileComponent implements OnInit {
     let loginParam = (document.getElementById("loginStatParam") as HTMLInputElement);
     let groupParam = (document.getElementById("groupStatParam") as HTMLInputElement);
     let dateParam = (document.getElementById("dateStatParam") as HTMLInputElement);
+    let errorParam = (document.getElementById("errorCountParam") as HTMLInputElement);
     let sizeParam = (document.getElementById("sizeStatParam") as HTMLInputElement);
 
     let loginParam1 = (document.getElementById("loginUserParam") as HTMLInputElement);
@@ -271,7 +272,8 @@ export class ProfileComponent implements OnInit {
     if ((loginParam != null && loginParam.value != "") ||
       (groupParam != null && groupParam.value != "") ||
       (dateParam != null && dateParam.value != "") ||
-      (sizeParam != null && sizeParam.value != "")) {
+      (sizeParam != null && sizeParam.value != "") ||
+      (errorParam != null && errorParam.value != "")) {
       queryParams += "?";
     }
     if ((loginParam1 != null && loginParam1.value != "") ||
@@ -285,6 +287,7 @@ export class ProfileComponent implements OnInit {
     if (groupParam != null && groupParam.value != "") { queryParams += "group=" + groupParam.value + "&"; }
     if (dateParam != null && dateParam.value != "") { queryParams += "date=" + dateParam.value + "&"; }
     if (sizeParam != null && sizeParam.value != "") { queryParams += "size=" + sizeParam.value + "&"; }
+    if (errorParam != null && errorParam.value != "") { queryParams += "error=" + errorParam.value + "&"; }
 
     if (loginParam1 != null && loginParam1.value != "") { queryParams1 += "login=" + loginParam1.value + "&"; }
     if (groupParam1 != null && groupParam1.value != "") { queryParams1 += "group=" + groupParam1.value + "&"; }

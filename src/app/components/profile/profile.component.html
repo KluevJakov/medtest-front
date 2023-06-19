@@ -14,6 +14,7 @@
                             <input type="text" class="form-control" placeholder="Логин" id="loginStatParam" (keyup)="changeSearchStat()">
                             <input type="text" class="form-control" placeholder="Группа" id="groupStatParam" (keyup)="changeSearchStat()">
                             <input type="date" class="form-control" id="dateStatParam" (change)="changeSearchStat()">
+                            <input type="number" min="0" class="form-control" id="errorCountParam" placeholder="Кол-во ошибок" (input)="changeSearchStat()">
                             <input type="number" min="0" class="form-control" id="sizeStatParam" placeholder="Выборка" (input)="changeSearchStat()">
                             <button type="button" class="btn btn-outline-primary" style="  margin-bottom: 0;" (click)="genDoc()">Выгрузить отчет</button>
                         </div>
@@ -31,9 +32,9 @@
                             <tbody>
                                 <ng-container *ngFor="let t of statList; let i = index" class="ticketsElem">
                                     <tr>
-                                        <td *ngIf="t.errorCount == 0" class="ticketNum ticketStatusColorNum2">{{i+1}}
+                                        <td *ngIf="t.errorCount <= 24" class="ticketNum ticketStatusColorNum2">{{i+1}}
                                         </td>
-                                        <td *ngIf="t.errorCount != 0" class="ticketNum ticketStatusColorNum3">{{i+1}}
+                                        <td *ngIf="t.errorCount > 24" class="ticketNum ticketStatusColorNum3">{{i+1}}
                                         </td>
                                         <td>{{t.name}}</td>
                                         <td>{{t.groupp}}</td>
@@ -136,28 +137,34 @@
         </div>
     </ng-container>
 
-    <ng-container *ngIf="user.roles[0].systemName == 'USER'">
+    <ng-container *ngIf="user.roles[0].systemName == 'USER'"> 
         <div class="container-fluid d-flex justify-content-evenly align-items-center"
             style="padding: 0 250px; height: 20%; min-height: 120px; min-width: 1070px;">
-            <button class="btn btn-main-grey menu-btn" (click)="test()">Тестирование</button>
+            <button class="btn btn-main-grey menu-btn" [ngClass]="{'indicateBtn': this.state!.state == 'TEST'
+            || this.state!.state == 'TICKET' || this.state!.state == 'THEME' || this.state!.state == 'ERROR' || this.state!.state == 'EXAM' || 
+            this.state!.state == 'MARATHON' || this.state!.state == 'FAVORITE'}" 
+             (click)="test()">Тестирование</button>
 
             <div class="form-check form-switch" style="transform: scale(3); display: none;">
                 <input class="form-check-input" type="checkbox" role="switch" id="mainSwitch" (click)="swap()">
             </div>
 
-            <button class="btn btn-main-grey menu-btn" (click)="traning()">Обучение</button>
+            <button class="btn btn-main-grey menu-btn" [ngClass]="{'indicateBtn': this.state!.state == 'TRAIN'}" 
+            (click)="traning()">Обучение</button>
         </div>
         <div *ngIf="this.state?.state == 'TEST'"
             class="container-fluid d-flex flex-row justify-content-evenly align-items-center BottomBlock">
-            <div>
-                <button class="btn btn-main menu-btn" (click)="tickets()">Билеты</button>
-                <button class="btn btn-main-light menu-btn" (click)="themes()">Темы</button>
-                <button class="btn btn-main-light menu-btn" (click)="errors()">Ошибки</button>
-            </div>
-            <div>
-                <button class="btn btn-main menu-btn" (click)="exam()">Экзамен</button>
-                <button class="btn btn-main-light menu-btn" (click)="marathon()">Марафон</button>
-                <button class="btn btn-main-light menu-btn" (click)="favorites()">Избранное</button>
+            <div class="addStyle1">
+                <div>
+                    <button class="btn btn-main menu-btn" (click)="tickets()">Билеты</button>
+                    <button class="btn btn-main-light menu-btn" (click)="themes()">Темы</button>
+                    <button class="btn btn-main-light menu-btn" (click)="errors()">Ошибки</button>
+                </div>
+                <div>
+                    <button class="btn btn-main menu-btn" (click)="exam()">Экзамен</button>
+                    <button class="btn btn-main-light menu-btn" (click)="marathon()">Марафон</button>
+                    <button class="btn btn-main-light menu-btn" (click)="favorites()">Избранное</button>
+                </div>
             </div>
         </div>
         <div *ngIf="this.state?.state == 'TRAIN'"
