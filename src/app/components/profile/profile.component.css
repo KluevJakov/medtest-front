@@ -185,3 +185,7 @@
     padding: 20px;
     border-radius: 10px;
 }
+
+#dateStatParam input::-webkit-date-and-time-value{
+    text-align: center;
+}
