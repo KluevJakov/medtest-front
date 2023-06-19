@@ -58,10 +58,8 @@ export class ModalCreateQuestion {
             question.text = result.id;
             question.id = parseInt((document.getElementById("themeSelect") as HTMLSelectElement).value);
             this.http.post<any>(API_URL + '/api/theme/link', question, AuthService.getJwtHeader())
-            .subscribe((result: any) => {},(error: HttpErrorResponse) => {console.log(error.error);});
+            .subscribe((result: any) => {this.modalService.close("NO");},(error: HttpErrorResponse) => {console.log(error.error);this.modalService.close("NO");});
         },(error: HttpErrorResponse) => {console.log(error.error);});
-
-        this.modalService.close("NO");
     }
 
     quit () {

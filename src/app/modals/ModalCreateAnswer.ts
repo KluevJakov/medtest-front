@@ -47,9 +47,7 @@ export class ModalCreateAnswer {
         answer.correct = (document.getElementById("correctAnswer") as HTMLInputElement).checked;
 
         this.http.post<any>(API_URL + '/api/answer/create', answer, AuthService.getJwtHeader())
-            .subscribe((result: any) => { }, (error: HttpErrorResponse) => { console.log(error.error); });
-
-        this.modalService.close("NO");
+            .subscribe((result: any) => {this.modalService.close("NO"); }, (error: HttpErrorResponse) => { console.log(error.error); this.modalService.close("NO");});
     }
 
     quit() {
